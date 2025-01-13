@@ -144,6 +144,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
         int score = 0; 
         int lives = 3;
+        int highscore = 0;
         boolean gameOver = false;
 
         int gameLevel = 1;
@@ -265,6 +266,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             }
             else {
                 g.drawString(String.valueOf(lives) + " Lives || " +  " Score: " + String.valueOf(score), tileSize/2, tileSize/2);
+                g.drawString("Highscore: " + String.valueOf(highscore), tileSize/2, (tileSize/2) + 20);
             }
         }
 
@@ -318,6 +320,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 if (collision(pacman, food)) {
                     foodEaten = food;
                     score+=10;
+                    if (score > highscore) {
+                        highscore = score;
+                    }
 
                 }
             }
@@ -474,8 +479,19 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             repaint(); //repaints everytime pacman moves
             if (gameOver) {
                 gameLoop.stop();
+                showGameOverPopup();
             }
 
+        }
+
+        private void showGameOverPopup() {
+            // Display the popup with the score and restart instructions
+            JOptionPane.showMessageDialog(
+                this, 
+                "Game Over!\nYour Score: " + score + "\nPress the Spacebar to Play Again!", 
+                "Game Over", 
+                JOptionPane.INFORMATION_MESSAGE
+            );
         }
 
         @Override
@@ -497,8 +513,10 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                     resetPositions();
                     lives = 3;
                     score = 0;
+                    gameLevel = 1;
                     gameOver = false;
                     gameLoop.start();
+
                 }
                 
             }
@@ -535,3 +553,4 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
 
 }
+
